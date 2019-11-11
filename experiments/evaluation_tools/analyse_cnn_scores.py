@@ -86,11 +86,11 @@ def calcScores(network, data, thresholds):
         pos_right = pos_right.sum()
         neg_right = torch.gt(neg_distances, t).sum()
         
-        print("[*] Threshold set to: {}".format(t))
-        print("Positive right classifications: {:.2f}% {}/{}".format(pos_right/num_pos*100, pos_right, num_pos))
-        print("Negative right classifications: {:.2f}% {}/{}".format(neg_right/num_neg*100, neg_right, num_neg))
-        print("All right classifications: {:.2f}% {}/{}".format((pos_right+neg_right)/(num_pos+num_neg)*100,
-                                                                pos_right+neg_right, num_pos+num_neg))
+        print(("[*] Threshold set to: {}".format(t)))
+        print(("Positive right classifications: {:.2f}% {}/{}".format(pos_right/num_pos*100, pos_right, num_pos)))
+        print(("Negative right classifications: {:.2f}% {}/{}".format(neg_right/num_neg*100, neg_right, num_neg)))
+        print(("All right classifications: {:.2f}% {}/{}".format((pos_right+neg_right)/(num_pos+num_neg)*100,
+                                                                pos_right+neg_right, num_pos+num_neg)))
 
 @ex.automain
 def my_main(_config, cnn):
@@ -119,6 +119,6 @@ def my_main(_config, cnn):
     dataloader['transform'] = 'center'
     dataloader['max_per_person'] = 40
     db = Datasets(dataset, dataloader)
-    print("[*] Evaluating {}".format(db))
+    print(("[*] Evaluating {}".format(db)))
     data = db._data._dataloader.data
     calcScores(network, data, thresholds)

@@ -9,7 +9,7 @@ from scipy.spatial.distance import cdist
 from torch.autograd import Variable
 
 import cv2
-from frcnn.model.nms_wrapper import nms
+from .frcnn.model.nms_wrapper import nms
 
 from .utils import bbox_overlaps, bbox_transform_inv, clip_boxes
 
@@ -419,7 +419,7 @@ class Tracker():
 
 		for t in self.tracks:
 			track_ind = int(t.id)
-			if track_ind not in self.results.keys():
+			if track_ind not in list(self.results.keys()):
 				self.results[track_ind] = {}
 			pos = t.pos[0] / blob['im_info'][0][2]
 			sc = t.score

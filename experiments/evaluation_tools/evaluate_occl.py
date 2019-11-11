@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import _init_paths
 
@@ -130,7 +130,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
         gt_total_len = len(gt_in_person)
         gt_frames_tmp = gtDB[gt_in_person, 0].astype(int)
         gt_frames_list = list(gt_frames)
-        st_total_len = sum([1 if i in M[gt_frames_list.index(f)].keys() else 0 for f in gt_frames_tmp])
+        st_total_len = sum([1 if i in list(M[gt_frames_list.index(f)].keys()) else 0 for f in gt_frames_tmp])
         ratio = float(st_total_len) / gt_total_len
         
         if ratio < 0.2:
@@ -149,7 +149,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
     M_arr = np.zeros((f_gt, n_gt), dtype=int)
     
     for i in range(f_gt):
-        for gid in M[i].keys():
+        for gid in list(M[i].keys()):
             M_arr[i, gid] = M[i][gid] + 1
     
     for i in range(n_gt):
@@ -334,12 +334,12 @@ def my_main(_config):
             # Find gaps in the tracks
             gt_tracked = {}
             for f,v in enumerate(M):
-                for gt in v.keys():
+                for gt in list(v.keys()):
                     if gt not in gt_tracked:
                         gt_tracked[gt] = []
                     gt_tracked[gt].append(f)
 
-            for gid, times in gt_tracked.items():
+            for gid, times in list(gt_tracked.items()):
                 times = np.array(times)
                 for i in range(len(times)-1):
                     t0 = times[i]
@@ -349,7 +349,7 @@ def my_main(_config):
 
                     last_non_empty = -1
                     for j in range(t0, -1, -1):
-                        if gid in M[j].keys():
+                        if gid in list(M[j].keys()):
                             last_non_empty = j
                             break
                     next_non_empty = -1
@@ -391,7 +391,7 @@ def my_main(_config):
                 for frame, v in enumerate(vis):
                     if v == 0 and f0 != -1:
                         count += 1
-                        if gid in M[frame].keys():
+                        if gid in list(M[frame].keys()):
                             n_cov += 1
                     elif v == 1:
                         # gap ended
@@ -400,7 +400,7 @@ def my_main(_config):
 
                             last_non_empty = -1
                             for j in range(f0, -1, -1):
-                                if gid in M[j].keys():
+                                if gid in list(M[j].keys()):
                                     last_non_empty = j
                                     break
                             next_non_empty = -1

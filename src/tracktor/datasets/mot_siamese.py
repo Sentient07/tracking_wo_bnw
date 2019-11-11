@@ -93,19 +93,19 @@ class MOT_Siamese(MOT17_Sequence):
 			im_path = sample['im_path']
 			gt = sample['gt']
 
-			for k,v in tracks.items():
-				if k in gt.keys():
+			for k,v in list(tracks.items()):
+				if k in list(gt.keys()):
 					v.append({'id':k, 'im_path':im_path, 'gt':gt[k]})
 					del gt[k]
 
 			# For all remaining BB in gt new tracks are created
-			for k,v in gt.items():
+			for k,v in list(gt.items()):
 				tracks[k] = [{'id':k, 'im_path':im_path, 'gt':v}]
 
 		# sample max_per_person images and filter out tracks smaller than 4 samples
 		#outdir = get_output_dir("siamese_test")
 		res = []
-		for k,v in tracks.items():
+		for k,v in list(tracks.items()):
 			l = len(v)
 			if l >= self.K:
 				pers = []
@@ -121,7 +121,7 @@ class MOT_Siamese(MOT17_Sequence):
 				res.append(np.array(pers))
 
 		if self._seq_name:
-			print("[*] Loaded {} persons from sequence {}.".format(len(res), self._seq_name))
+			print(("[*] Loaded {} persons from sequence {}.".format(len(res), self._seq_name)))
 
 		self.data = res
 

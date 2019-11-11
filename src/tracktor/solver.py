@@ -57,7 +57,7 @@ class Solver(object):
 		filename = model.name + '_iter_{:d}'.format(iter) + '.pth'
 		filename = os.path.join(self.output_dir, filename)
 		torch.save(model.state_dict(), filename)
-		print('Wrote snapshot to: {:s}'.format(filename))
+		print(('Wrote snapshot to: {:s}'.format(filename)))
 
 		# Delete old snapshots (keep minimum 3 latest)
 		snapshots_iters = []
@@ -127,7 +127,7 @@ class Solver(object):
 			# TRAINING
 			if scheduler:
 				scheduler.step()
-				print("[*] New learning rate(s): {}".format(scheduler.get_lr()))
+				print(("[*] New learning rate(s): {}".format(scheduler.get_lr())))
 
 			now = time.time()
 
@@ -140,21 +140,21 @@ class Solver(object):
 				losses['total_loss'].backward()
 				optim.step()
 
-				for k,v in losses.items():
-					if k not in self._losses.keys():
+				for k,v in list(losses.items()):
+					if k not in list(self._losses.keys()):
 						self._losses[k] = []
 					self._losses[k].append(v.data.cpu().numpy())
 
 				if log_nth and i % log_nth == 0:
 					next_now = time.time()
-					print('[Iteration %d/%d] %.3f s/it' % (i + epoch * iter_per_epoch,
-																  iter_per_epoch * num_epochs, (next_now-now)/log_nth))
+					print(('[Iteration %d/%d] %.3f s/it' % (i + epoch * iter_per_epoch,
+																  iter_per_epoch * num_epochs, (next_now-now)/log_nth)))
 					now = next_now
 
-					for k,v in self._losses.items():
+					for k,v in list(self._losses.items()):
 						last_log_nth_losses = self._losses[k][-log_nth:]
 						train_loss = np.mean(last_log_nth_losses)
-						print('%s: %.3f' % (k, train_loss))
+						print(('%s: %.3f' % (k, train_loss)))
 						self.writer.add_scalar(k, train_loss, i + epoch * iter_per_epoch)
 						
 	
@@ -165,8 +165,8 @@ class Solver(object):
 
 					losses = model.sum_losses(batch, **model_args)
 
-					for k,v in losses.items():
-						if k not in self._val_losses.keys():
+					for k,v in list(losses.items()):
+						if k not in list(self._val_losses.keys()):
 							self._val_losses[k] = []
 						self._val_losses[k].append(v.data.cpu().numpy())
 
@@ -174,7 +174,7 @@ class Solver(object):
 						break
 					
 				model.train()
-				for k,v in self._losses.items():
+				for k,v in list(self._losses.items()):
 					last_log_nth_losses = self._val_losses[k][-log_nth:]
 					val_loss = np.mean(last_log_nth_losses)
 					self.val_writer.add_scalar(k, val_loss, (epoch+1) * iter_per_epoch)

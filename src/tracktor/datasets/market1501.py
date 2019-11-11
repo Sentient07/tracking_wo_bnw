@@ -123,7 +123,7 @@ class Market1501(Dataset):
 		# sample max_per_person images and filter out tracks smaller than 4 samples
 		#outdir = get_output_dir("siamese_test")
 		res = []
-		for k,v in tracks.items():
+		for k,v in list(tracks.items()):
 			l = len(v)
 			if l >= self.K:
 				pers = []
@@ -136,7 +136,7 @@ class Market1501(Dataset):
 				res.append(np.array(pers))
 
 		if self.seq_name:
-			print("[*] Loaded {} persons from sequence {}.".format(len(res), self.seq_name))
+			print(("[*] Loaded {} persons from sequence {}.".format(len(res), self.seq_name)))
 
 		self.data = res
 

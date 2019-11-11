@@ -94,7 +94,7 @@ def plot_sequence(tracks, db, output_dir):
 		output_dir (String): Directory where to save the resulting images
 	"""
 
-	print("[*] Plotting whole sequence to {}".format(output_dir))
+	print(("[*] Plotting whole sequence to {}".format(output_dir)))
 
 	if not osp.exists(output_dir):
 		os.makedirs(output_dir)
@@ -122,8 +122,8 @@ def plot_sequence(tracks, db, output_dir):
 		fig.add_axes(ax)
 		ax.imshow(im)
 
-		for j,t in tracks.items():
-			if i in t.keys():
+		for j,t in list(tracks.items()):
+			if i in list(t.keys()):
 				t_i = t[i]
 				ax.add_patch(
 					plt.Rectangle((t_i[0], t_i[1]),
@@ -213,7 +213,7 @@ def plot_tracks(blobs, tracks, gt_tracks=None, output_dir=None, name=None):
 
 def interpolate(tracks):
 	interpolated = {}
-	for i, track in tracks.items():
+	for i, track in list(tracks.items()):
 		interpolated[i] = {}
 		frames = []
 		x0 = []
@@ -221,7 +221,7 @@ def interpolate(tracks):
 		x1 = []
 		y1 = []
 
-		for f, bb in track.items():
+		for f, bb in list(track.items()):
 			frames.append(f)
 			x0.append(bb[0])
 			y0.append(bb[1])

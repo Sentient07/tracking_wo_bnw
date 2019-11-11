@@ -11,7 +11,7 @@ Demo script showing detections in sample images.
 
 See README.md for installation instructions before running.
 """
-from __future__ import absolute_import, division, print_function
+
 
 import os
 import os.path as osp

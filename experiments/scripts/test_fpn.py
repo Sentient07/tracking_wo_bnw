@@ -4,7 +4,7 @@
 # Written by Jianwei Yang, based on code from faster R-CNN
 # --------------------------------------------------------
 
-from __future__ import absolute_import, division, print_function
+
 
 import argparse
 import os

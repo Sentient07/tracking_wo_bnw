@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import _init_paths
 
@@ -136,7 +136,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
         gt_total_len = len(gt_in_person)
         gt_frames_tmp = gtDB[gt_in_person, 0].astype(int)
         gt_frames_list = list(gt_frames)
-        st_total_len = sum([1 if i in M[gt_frames_list.index(f)].keys() else 0 for f in gt_frames_tmp])
+        st_total_len = sum([1 if i in list(M[gt_frames_list.index(f)].keys()) else 0 for f in gt_frames_tmp])
         ratio = float(st_total_len) / gt_total_len
         
         if ratio < 0.2:
@@ -155,7 +155,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
     M_arr = np.zeros((f_gt, n_gt), dtype=int)
     
     for i in range(f_gt):
-        for gid in M[i].keys():
+        for gid in list(M[i].keys()):
             M_arr[i, gid] = M[i][gid] + 1
     
     for i in range(n_gt):
@@ -252,8 +252,8 @@ def evaluate_tracking(sequences, track_dir, gt_dir):
 
 def evaluate_new(results, gt_file):
     res = []
-    for i, track in results.items():
-        for frame, bb in track.items():
+    for i, track in list(results.items()):
+        for frame, bb in list(track.items()):
             x1 = bb[0]
             y1 = bb[1]
             x2 = bb[2]
@@ -389,9 +389,9 @@ def my_main(oracle_tracker, siamese, _config):
         #        of.write("{}:       {}\n".format(t, sw))
 
         with open(osp.join(output_dir, str(db)+"_debug.txt"), "w") as of:
-            for i, track in debug.items():
+            for i, track in list(debug.items()):
                 of.write("Track id: {}\n".format(i))
-                for im_index, data in track.items():
+                for im_index, data in list(track.items()):
                     of.write("Frame: {}\n".format(im_index))
                     of.write("Pos: {}\n".format(data["pos"]))
                     of.write("{}".format(data["info"]))
@@ -407,9 +407,9 @@ def my_main(oracle_tracker, siamese, _config):
 
         with open(osp.join(output_dir, str(db)+"_sum.txt"), "w") as of:
             #for f1,sw in enumerate(switches, 1):
-            for f1, sw in switches.items():
+            for f1, sw in list(switches.items()):
                 of.write("[*] Frame: {}\n".format(f1))
-                for t1, (t0, f0, gt_id, gt_height, gt_vis) in sw.items():
+                for t1, (t0, f0, gt_id, gt_height, gt_vis) in list(sw.items()):
                     gt_heights.append(gt_height)
                     gt_ids.append(gt_id)
                     gt_viss.append(gt_vis)
@@ -418,7 +418,7 @@ def my_main(oracle_tracker, siamese, _config):
                     #of.write("{}".format(debug[t0-1][f0-1]["info"]))
                     #debug[t1-1][f1-1]["pos"][3]-debug[t1-1][f1-1]["pos"][1]
                     of.write("Old Track:\n")
-                    for frame, value in debug[t0-1].items():
+                    for frame, value in list(debug[t0-1].items()):
                         if frame == f0-1 or frame == f0 or frame == f0+1:
                             of.write("{} {}\n{}".format(frame, value["pos"], value["info"]))
                         if frame == f0:
@@ -434,7 +434,7 @@ def my_main(oracle_tracker, siamese, _config):
 
 
                     of.write("\nNew Track:\n")
-                    for frame, value in debug[t1-1].items():
+                    for frame, value in list(debug[t1-1].items()):
                         if frame == f1-1 or frame == f1-2 or frame == f1-3:
                             of.write("{} {}\n{}".format(frame, value["pos"], value["info"]))
                         if frame == f1-1:
@@ -459,10 +459,10 @@ def my_main(oracle_tracker, siamese, _config):
         print("[*] Mean visibility of tracked boxes: {}".format(np.mean(gt_mean_vis)))
         print("[*] Reasons for ID swtiches:")
         print("\tLoose:")
-        for k,v in reason_loose.items():
+        for k,v in list(reason_loose.items()):
             print("\t\t{}: {}".format(k,v))
         print("\tFind:")
-        for k,v in reason_find.items():
+        for k,v in list(reason_find.items()):
             print("\t\t{}: {}".format(k,v))
         print(gt_ids)
 
@@ -488,5 +488,5 @@ def my_main(oracle_tracker, siamese, _config):
     with open(file, "w") as of:
         writer = csv.writer(of, delimiter=' ')
         for row in analysis_results:
-            row_new = list(map(lambda x: str(x).replace(".",","), row))
+            row_new = list([str(x).replace(".",",") for x in row])
             writer.writerow(row_new)

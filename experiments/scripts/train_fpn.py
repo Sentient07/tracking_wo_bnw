@@ -4,7 +4,7 @@
 # Written by Jianwei Yang, based on code from faster R-CNN
 # --------------------------------------------------------
 
-from __future__ import absolute_import, division, print_function
+
 
 import argparse
 import logging
@@ -347,7 +347,7 @@ if __name__ == '__main__':
 
     lr = cfg.TRAIN.LEARNING_RATE
     params = []
-    for key, value in dict(FPN.named_parameters()).items():
+    for key, value in list(dict(FPN.named_parameters()).items()):
         if value.requires_grad:
             if 'bias' in key:
                 params += [{'params': [value], 'lr': lr * (cfg.TRAIN.DOUBLE_BIAS + 1), \
@@ -369,7 +369,7 @@ if __name__ == '__main__':
         checkpoint = torch.load(args.pre_checkpoint)
         model_state_dict = FPN.state_dict()
         state_dict = {k: v
-                    for k, v in checkpoint['model'].items()
+                    for k, v in list(checkpoint['model'].items())
                     if v.shape == model_state_dict[k].shape}
         model_state_dict.update(state_dict)
         FPN.load_state_dict(model_state_dict)
@@ -385,7 +385,7 @@ if __name__ == '__main__':
         optimizer.load_state_dict(checkpoint['optimizer'])
         lr = optimizer.param_groups[0]['lr']
 
-        if 'pooling_mode' in checkpoint.keys():
+        if 'pooling_mode' in list(checkpoint.keys()):
             cfg.POOLING_MODE = checkpoint['pooling_mode']
 
         _print("loaded checkpoint %s" % (load_name), )
@@ -425,7 +425,7 @@ if __name__ == '__main__':
         data_iter = iter(dataloader)
 
         for step in range(iters_per_epoch):
-            data = data_iter.next()
+            data = next(data_iter)
             im_data.data.resize_(data[0].size()).copy_(data[0])
             im_info.data.resize_(data[1].size()).copy_(data[1])
             gt_boxes.data.resize_(data[2].size()).copy_(data[2])

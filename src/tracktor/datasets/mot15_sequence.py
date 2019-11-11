@@ -71,7 +71,7 @@ class MOT15_Sequence(Dataset):
 		sample['gt'] = {}
 		sample['dets'] = []
 		# resize tracks
-		for k,v in d['gt'].items():
+		for k,v in list(d['gt'].items()):
 			sample['gt'][k] = v * sample['im_info'][2]
 		for det in d['dets']:
 			sample['dets'].append(np.hstack([det[:4] * sample['im_info'][2], det[4:5]]))
@@ -179,12 +179,12 @@ class MOT15_Sequence(Dataset):
 
 		file = osp.join(output_dir, self._seq_name+'.txt')
 
-		print("[*] Writing to: {}".format(file))
+		print(("[*] Writing to: {}".format(file)))
 
 		with open(file, "w") as of:
 			writer = csv.writer(of, delimiter=',')
-			for i, track in all_tracks.items():
-				for frame, bb in track.items():
+			for i, track in list(all_tracks.items()):
+				for frame, bb in list(track.items()):
 					x1 = bb[0]
 					y1 = bb[1]
 					x2 = bb[2]

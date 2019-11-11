@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from sacred import Experiment
 import os
@@ -118,7 +118,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
         gt_total_len = len(gt_in_person)
         gt_frames_tmp = gtDB[gt_in_person, 0].astype(int)
         gt_frames_list = list(gt_frames)
-        st_total_len = sum([1 if i in M[gt_frames_list.index(f)].keys() else 0 for f in gt_frames_tmp])
+        st_total_len = sum([1 if i in list(M[gt_frames_list.index(f)].keys()) else 0 for f in gt_frames_tmp])
         ratio = float(st_total_len) / gt_total_len
 
         if ratio < 0.2:
@@ -137,7 +137,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
     M_arr = np.zeros((f_gt, n_gt), dtype=int)
 
     for i in range(f_gt):
-        for gid in M[i].keys():
+        for gid in list(M[i].keys()):
             M_arr[i, gid] = M[i][gid] + 1
 
     for i in range(n_gt):
@@ -400,7 +400,7 @@ def my_main(_config):
 
             for frame in range(f_gt):
                 d = D[frame]
-                for gt_id, _ in d.items():
+                for gt_id, _ in list(d.items()):
 
                     gid = -1
                     gid_ind = np.where(gt_ids_old == gt_id)[0]
@@ -409,13 +409,13 @@ def my_main(_config):
 
                     # every gap is only handled once, at the last detection before the gap begins
                     # so here we are in the middle of the gap => do nothing
-                    if gt_id not in d.keys():
+                    if gt_id not in list(d.keys()):
                         continue
 
                     # OK let's check if we have a gap in the detections
                     next_non_empty = -1
                     for j in range(frame+1, f_gt):
-                        if gt_id in D[j].keys():
+                        if gt_id in list(D[j].keys()):
                             next_non_empty = j
                             break
 
@@ -427,7 +427,7 @@ def my_main(_config):
                     gap_length = next_non_empty - frame - 1
                     count_tracked = 0
                     for j in range(frame+1, next_non_empty):
-                        if gid in M[j].keys():
+                        if gid in list(M[j].keys()):
                             count_tracked += 1
 
                     if gap_length > 115 and gap_length < 135:

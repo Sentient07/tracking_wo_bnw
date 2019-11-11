@@ -61,19 +61,19 @@ def build_samples(data):
         im_path = sample['im_path']
         gt = sample['gt']
 
-        for k,v in tracks.items():
-            if k in gt.keys():
+        for k,v in list(tracks.items()):
+            if k in list(gt.keys()):
                 v.append({'t':t, 'id':k, 'im_path':im_path, 'gt':gt[k]})
                 del gt[k]
 
         # For all remaining BB in gt new tracks are created
-        for k,v in gt.items():
+        for k,v in list(gt.items()):
             tracks[k] = [{'t':t, 'id':k, 'im_path':im_path, 'gt':v}]
 
     # sample max_per_person images and filter out tracks smaller than 4 samples
     #outdir = get_output_dir("siamese_test")
     res = []
-    for k,v in tracks.items():
+    for k,v in list(tracks.items()):
         l = len(v)
         if l >= 2:
             pers = []
@@ -110,7 +110,7 @@ def my_main(_config, cnn):
     results = []
 
     for db in Datasets("mot_train_", {'vis_threshold':0.5}):
-        print("[*] Evaluating {}".format(db))
+        print(("[*] Evaluating {}".format(db)))
         data = db.data
         data = build_samples(data)
 

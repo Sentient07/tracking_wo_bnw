@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import _init_paths
 
@@ -155,7 +155,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
         gt_total_len = len(gt_in_person)
         gt_frames_tmp = gtDB[gt_in_person, 0].astype(int)
         gt_frames_list = list(gt_frames)
-        st_total_len = sum([1 if i in M[gt_frames_list.index(f)].keys() else 0 for f in gt_frames_tmp])
+        st_total_len = sum([1 if i in list(M[gt_frames_list.index(f)].keys()) else 0 for f in gt_frames_tmp])
         ratio = float(st_total_len) / gt_total_len
         
         if ratio < 0.2:
@@ -174,7 +174,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
     M_arr = np.zeros((f_gt, n_gt), dtype=int)
     
     for i in range(f_gt):
-        for gid in M[i].keys():
+        for gid in list(M[i].keys()):
             M_arr[i, gid] = M[i][gid] + 1
     
     for i in range(n_gt):

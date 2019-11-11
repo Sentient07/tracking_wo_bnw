@@ -72,25 +72,25 @@ def clear_mot_hungarian(stDB, gtDB, threshold):
         st_inds[frame][sid] = i
 
     for t in range(f_gt):
-        g[t] = len(gt_inds[t].keys()) 
+        g[t] = len(list(gt_inds[t].keys())) 
         
         # preserving original mapping if box of this trajectory has large enough iou in avoid of ID switch
         if t > 0:
             mappings = list(M[t - 1].keys())
             sorted(mappings)
             for k in range(len(mappings)):
-                if mappings[k] in gt_inds[t].keys() and M[t - 1][mappings[k]] in st_inds[t].keys():
+                if mappings[k] in list(gt_inds[t].keys()) and M[t - 1][mappings[k]] in list(st_inds[t].keys()):
                     row_gt = gt_inds[t][mappings[k]]
                     row_st = st_inds[t][M[t - 1][mappings[k]]]
                     dist = bbox_overlap(stDB[row_st, 2:6], gtDB[row_gt, 2:6])
                     if dist >= threshold:
                         M[t][mappings[k]] = M[t - 1][mappings[k]]
                         if VERBOSE:
-                            print('perserving mapping: %d to %d'%(mappings[k], M[t][mappings[k]]))
+                            print(('perserving mapping: %d to %d'%(mappings[k], M[t][mappings[k]])))
         # mapping remaining groundtruth and estimated boxes
         unmapped_gt, unmapped_st  = [], []
-        unmapped_gt = [key for key in gt_inds[t].keys() if key not in M[t].keys()]
-        unmapped_st = [key for key in st_inds[t].keys() if key not in M[t].values()]
+        unmapped_gt = [key for key in list(gt_inds[t].keys()) if key not in list(M[t].keys())]
+        unmapped_st = [key for key in list(st_inds[t].keys()) if key not in list(M[t].values())]
         if len(unmapped_gt) > 0 and len(unmapped_st) > 0: 
             overlaps = np.zeros((n_gt, n_st), dtype=float)
             for i in range(len(unmapped_gt)):
@@ -107,12 +107,12 @@ def clear_mot_hungarian(stDB, gtDB, threshold):
                     continue
                 M[t][unmapped_gt[matched[0]]] = unmapped_st[matched[1]]
                 if VERBOSE:
-                    print('adding mapping: %d to %d'%(unmapped_gt[matched[0]], M[t][unmapped_gt[matched[0]]]))
+                    print(('adding mapping: %d to %d'%(unmapped_gt[matched[0]], M[t][unmapped_gt[matched[0]]])))
 
         # compute statistics
         cur_tracked = list(M[t].keys())
-        st_tracked = M[t].values()
-        fps = [key for key in st_inds[t].keys() if key not in M[t].values()] 
+        st_tracked = list(M[t].values())
+        fps = [key for key in list(st_inds[t].keys()) if key not in list(M[t].values())] 
         for k in range(len(fps)):
             allfps[t][fps[k]] = fps[k]
         # check miss match errors
@@ -122,10 +122,10 @@ def clear_mot_hungarian(stDB, gtDB, threshold):
                 est = M[t][ct]
                 last_non_empty = -1
                 for j in range(t - 1, 0, -1):
-                    if ct in M[j].keys():
+                    if ct in list(M[j].keys()):
                         last_non_empty = j
                         break
-                if ct in gt_inds[t - 1].keys() and last_non_empty != -1:
+                if ct in list(gt_inds[t - 1].keys()) and last_non_empty != -1:
                     mtct, mlastnonemptyct = -1, -1
                     if ct in M[t]:
                         mtct = M[t][ct]
@@ -151,7 +151,7 @@ def clear_mot_hungarian(stDB, gtDB, threshold):
                         switches[int(gt_frames[t])][id_new] = [id_old, int(gt_frames[last_non_empty]), gt_id, gt_height, gt_vis]
 
         c[t] = len(cur_tracked)
-        fp[t] = len(st_inds[t].keys())
+        fp[t] = len(list(st_inds[t].keys()))
         fp[t] -= c[t]
         missed[t] = g[t] - c[t]
         for i in range(len(cur_tracked)):
@@ -165,21 +165,21 @@ def clear_mot_hungarian(stDB, gtDB, threshold):
     gt_height_list = []
     gt_vis_list = []
     for t,v in enumerate(M):
-        for gt in v.keys():
+        for gt in list(v.keys()):
             gt_row = gt_inds[t][gt]
             gt_height_list.append(float(gtDB[gt_row, 5]) - float(gtDB[gt_row, 3]))
             gt_vis_list.append(float(gtDB[gt_row, 8]))
 
     gt_tracked = {}
     for t,v in enumerate(M):
-        for gt in v.keys():
+        for gt in list(v.keys()):
             if gt not in gt_tracked:
                 gt_tracked[gt] = []
             gt_tracked[gt].append(t)
     missed_height = []
     missed_vis = []
     missed_dist = []
-    for gt, times in gt_tracked.items():
+    for gt, times in list(gt_tracked.items()):
         times = np.array(times)
         t0 = times[0]
         t1 = times[-1]

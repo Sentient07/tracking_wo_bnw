@@ -4,8 +4,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.models as models
-from fpn.model.fpn.resnet import FPNResNet
-from fpn.model.utils.config import cfg
+from .fpn.model.fpn.resnet import FPNResNet
+from .fpn.model.utils.config import cfg
 from torch.autograd import Variable
 
 

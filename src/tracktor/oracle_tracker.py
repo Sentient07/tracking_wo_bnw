@@ -4,8 +4,8 @@ import torch.nn.functional as F
 from scipy.optimize import linear_sum_assignment
 from torch.autograd import Variable
 
-from frcnn.model.bbox_transform import bbox_transform_inv, clip_boxes
-from frcnn.model.nms_wrapper import nms
+from .frcnn.model.bbox_transform import bbox_transform_inv, clip_boxes
+from .frcnn.model.nms_wrapper import nms
 
 from .tracker import Tracker, Track
 from .utils import bbox_overlaps
@@ -197,7 +197,7 @@ class OracleTracker(Tracker):
 		# regress
 		if self.pos_oracle:
 			for t in self.tracks:
-				if t.gt_id in gt.keys():
+				if t.gt_id in list(gt.keys()):
 					new_pos = gt[t.gt_id].cuda()
 					if self.pos_oracle_center_only:
 						# extract center coordinates of track
@@ -499,7 +499,7 @@ class OracleTracker(Tracker):
 
 		for t in self.tracks:
 			track_ind = int(t.id)
-			if track_ind not in self.results.keys():
+			if track_ind not in list(self.results.keys()):
 				self.results[track_ind] = {}
 			pos = t.pos[0] / blob['im_info'][0][2]
 			sc = t.score

@@ -20,7 +20,7 @@ metrics_names =f_content[1].replace('|', '').replace('\n', '').split()
 
 print(metrics_names)
 
-for seq_name, data in metrics_res.items():
+for seq_name, data in list(metrics_res.items()):
     print(f"{seq_name} & "
           f"{data[metrics_names.index('MOTA')]} & "
           f"{data[metrics_names.index('IDF1')]} & "

@@ -51,7 +51,7 @@ if __name__ == "__main__":
     x = 30 // np.array(frame_skips)
     y = []
     linestyle = ['solid', 'dashed']
-    for ls, (t, data) in zip(linestyle, results.items()):
+    for ls, (t, data) in zip(linestyle, list(results.items())):
         # y.append(np.array(data)[:, 0])
         # y.append(np.array(data)[:, 1])
         plt.plot(x, np.array(data)[:, 0], label=f'{t} - IDF1', ls=ls)

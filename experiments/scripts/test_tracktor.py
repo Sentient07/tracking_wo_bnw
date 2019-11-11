@@ -1,4 +1,4 @@
-from __future__ import absolute_import, division, print_function
+
 
 import os
 import os.path as osp
@@ -76,7 +76,7 @@ def my_main(tracktor, siamese, _config):
         config.cfg.TRAIN.USE_FLIPPED = False
         checkpoint = torch.load(tracktor['obj_detect_weights'])
 
-        if 'pooling_mode' in checkpoint.keys():
+        if 'pooling_mode' in list(checkpoint.keys()):
             config.cfg.POOLING_MODE = checkpoint['pooling_mode']
 
         set_cfgs = ['ANCHOR_SCALES', '[4, 8, 16, 32]',

@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from sacred import Experiment
 import os
@@ -116,7 +116,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
         gt_total_len = len(gt_in_person)
         gt_frames_tmp = gtDB[gt_in_person, 0].astype(int)
         gt_frames_list = list(gt_frames)
-        st_total_len = sum([1 if i in M[gt_frames_list.index(f)].keys() else 0 for f in gt_frames_tmp])
+        st_total_len = sum([1 if i in list(M[gt_frames_list.index(f)].keys()) else 0 for f in gt_frames_tmp])
         ratio = float(st_total_len) / gt_total_len
 
         if ratio < 0.2:
@@ -135,7 +135,7 @@ def evaluate_sequence(trackDB, gtDB, distractor_ids, iou_thres=0.5, minvis=0):
     M_arr = np.zeros((f_gt, n_gt), dtype=int)
 
     for i in range(f_gt):
-        for gid in M[i].keys():
+        for gid in list(M[i].keys()):
             M_arr[i, gid] = M[i][gid] + 1
 
     for i in range(n_gt):
@@ -373,7 +373,7 @@ def my_main(_config):
             #    st_inds[frame][sid] = i
 
             for frame, m in enumerate(M):
-                for gt_id, line in gt_inds_unf[frame].items():
+                for gt_id, line in list(gt_inds_unf[frame].items()):
 
                     vis = gtDB_unf[line, 8]
                     height = gtDB_unf[line, 5] - gtDB_unf[line, 3]
@@ -386,7 +386,7 @@ def my_main(_config):
                         gid = gid_ind[0]
 
                     # check if tracked
-                    if gid in m.keys():
+                    if gid in list(m.keys()):
                         tracked_visibilities.append(vis)
                         tracked_visibilities_heights.append(height)
                         continue
@@ -397,12 +397,12 @@ def my_main(_config):
                     # get distance to last time tracked
                     last_non_empty = -1
                     for j in range(frame, -1, -1):
-                        if gid in M[j].keys():
+                        if gid in list(M[j].keys()):
                             last_non_empty = j
                             break
                     next_non_empty = -1
                     for j in range(frame, f_gt):
-                        if gid in M[j].keys():
+                        if gid in list(M[j].keys()):
                             next_non_empty = j
                             break
 

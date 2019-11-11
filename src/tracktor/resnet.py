@@ -269,7 +269,7 @@ class ResNet(models.ResNet):
 
     def load_pretrained_dict(self, state_dict):
         """Load the pretrained weights and ignore the ones where size does not match"""
-        pretrained_state_dict = {k: v for k,v in state_dict.items() for kk,vv in self.state_dict().items() if k==kk and v.size() == vv.size()}
+        pretrained_state_dict = {k: v for k,v in list(state_dict.items()) for kk,vv in list(self.state_dict().items()) if k==kk and v.size() == vv.size()}
         updated_state_dict = self.state_dict()
         updated_state_dict.update(pretrained_state_dict)
         self.load_state_dict(updated_state_dict)
