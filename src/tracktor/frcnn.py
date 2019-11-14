@@ -1,7 +1,7 @@
 # FRCNN modified to be used in the tracker
 
-from .frcnn.nets.resnet_v1 import resnetv1
-from .frcnn.model.config import cfg as frcnn_cfg
+from frcnn.nets.resnet_v1 import resnetv1
+from frcnn.model.config import cfg as frcnn_cfg
 
 import torch
 import torch.nn as nn

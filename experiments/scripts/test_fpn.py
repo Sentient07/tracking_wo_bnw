@@ -183,7 +183,7 @@ def main():
     _t = {'im_detect': time.time(), 'misc': time.time()}
     det_file = os.path.join(output_dir, 'detections.pkl')
 
-    all_boxes = validate(FPN, dataloader, imdb, vis=args.vis,
+    all_boxes = validate(FPN, dataloader, imdb, output_dir, vis=args.vis,
                          cuda=args.cuda, soft_nms=args.soft_nms, score_thresh=args.score_thresh)
 
     print('Evaluating detections')

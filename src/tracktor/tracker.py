@@ -9,7 +9,7 @@ from scipy.spatial.distance import cdist
 from torch.autograd import Variable
 
 import cv2
-from .frcnn.model.nms_wrapper import nms
+from frcnn.model.nms_wrapper import nms
 
 from .utils import bbox_overlaps, bbox_transform_inv, clip_boxes
 

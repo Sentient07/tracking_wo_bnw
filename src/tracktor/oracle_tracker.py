@@ -4,8 +4,8 @@ import torch.nn.functional as F
 from scipy.optimize import linear_sum_assignment
 from torch.autograd import Variable
 
-from .frcnn.model.bbox_transform import bbox_transform_inv, clip_boxes
-from .frcnn.model.nms_wrapper import nms
+from frcnn.model.bbox_transform import bbox_transform_inv, clip_boxes
+from frcnn.model.nms_wrapper import nms
 
 from .tracker import Tracker, Track
 from .utils import bbox_overlaps

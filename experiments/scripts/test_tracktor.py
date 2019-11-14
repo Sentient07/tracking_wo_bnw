@@ -38,8 +38,7 @@ def my_main(tracktor, siamese, _config):
     np.random.seed(tracktor['seed'])
     torch.backends.cudnn.deterministic = True
 
-    output_dir = osp.join(get_output_dir(tracktor['module_name']), tracktor['name'])
-    sacred_config = osp.join(output_dir, 'sacred_config.yaml')
+    output_dir = osp.join(tracktor['base_output_dir'], get_output_dir(tracktor['module_name'])[1:], tracktor['name'])
 
     if not osp.exists(output_dir):
         os.makedirs(output_dir)
